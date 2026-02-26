@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canadian Independent Fish Harvesters Federation | CIFHF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy: #1B3A5C;
+            --navy-dark: #122840;
+            --navy-light: #2A5580;
+            --orange: #E8732A;
+            --orange-hover: #D4631E;
+            --orange-light: #F5A66A;
+            --white: #FFFFFF;
+            --gray-50: #F8F9FA;
+            --gray-100: #EEF0F2;
+            --gray-200: #D6DAE0;
+            --gray-400: #8E96A0;
+            --gray-600: #5A6270;
+            --gray-800: #2D3340;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+            --radius: 12px;
+        }
+
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font); color: var(--gray-800); line-height: 1.6; overflow-x: hidden; }
+
+        /* ========== NAVIGATION ========== */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(27, 58, 92, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .nav.scrolled {
+            background: rgba(18, 40, 64, 0.98);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 24px; height: 72px;
+        }
+        .nav-brand {
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none; color: var(--white);
+        }
+        .nav-logo {
+            width: 42px; height: 42px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--orange), var(--orange-light));
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: 800; color: var(--white);
+            box-shadow: 0 2px 8px rgba(232,115,42,0.4);
+        }
+        .nav-title { font-size: 15px; font-weight: 600; letter-spacing: 0.3px; }
+        .nav-title span { display: block; font-size: 11px; font-weight: 400; opacity: 0.7; letter-spacing: 0.5px; text-transform: uppercase; }
+
+        .nav-links { display: flex; align-items: center; gap: 8px; list-style: none; }
+        .nav-links a {
+            color: rgba(255,255,255,0.85); text-decoration: none;
+            font-size: 14px; font-weight: 500; padding: 8px 16px;
+            border-radius: 8px; transition: all 0.2s;
+        }
+        .nav-links a:hover { color: var(--white); background: rgba(255,255,255,0.1); }
+
+        .nav-actions { display: flex; align-items: center; gap: 12px; }
+        .lang-toggle {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: var(--white); padding: 6px 14px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s; font-family: var(--font); letter-spacing: 0.5px;
+        }
+        .lang-toggle:hover { background: rgba(255,255,255,0.2); }
+        .btn-login {
+            background: var(--orange); color: var(--white); border: none;
+            padding: 8px 20px; border-radius: 8px; font-size: 13px;
+            font-weight: 600; cursor: pointer; transition: all 0.2s;
+            font-family: var(--font);
+        }
+        .btn-login:hover { background: var(--orange-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(232,115,42,0.4); }
+
+        .hamburger {
+            display: none; background: none; border: none; cursor: pointer;
+            width: 32px; height: 32px; position: relative;
+        }
+        .hamburger span {
+            display: block; width: 22px; height: 2px; background: var(--white);
+            position: absolute; left: 5px; transition: all 0.3s;
+        }
+        .hamburger span:nth-child(1) { top: 9px; }
+        .hamburger span:nth-child(2) { top: 15px; }
+        .hamburger span:nth-child(3) { top: 21px; }
+        .hamburger.active span:nth-child(1) { top: 15px; transform: rotate(45deg); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { top: 15px; transform: rotate(-45deg); }
+
+        /* ========== HERO ========== */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(165deg, var(--navy-dark) 0%, var(--navy) 40%, var(--navy-light) 100%);
+            position: relative; overflow: hidden; text-align: center; padding: 120px 24px 80px;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 80%, rgba(232,115,42,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 80% 20%, rgba(42,85,128,0.3) 0%, transparent 60%);
+        }
+        .hero::after {
+            content: ''; position: absolute; inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .hero-content { position: relative; z-index: 1; max-width: 800px; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(232,115,42,0.15); border: 1px solid rgba(232,115,42,0.3);
+            padding: 8px 20px; border-radius: 30px; margin-bottom: 32px;
+            font-size: 13px; font-weight: 600; color: var(--orange-light);
+            letter-spacing: 0.5px; text-transform: uppercase;
+        }
+        .hero-badge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--orange); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800;
+            color: var(--white); line-height: 1.1; margin-bottom: 24px;
+            letter-spacing: -0.02em;
+        }
+        .hero h1 em {
+            font-style: normal;
+            background: linear-gradient(135deg, var(--orange), var(--orange-light));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.2rem); color: rgba(255,255,255,0.75);
+            max-width: 600px; margin: 0 auto 40px; line-height: 1.7; font-weight: 300;
+        }
+        .hero-cta {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: var(--orange); color: var(--white);
+            padding: 16px 36px; border-radius: 12px; text-decoration: none;
+            font-size: 16px; font-weight: 600; transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(232,115,42,0.4);
+        }
+        .hero-cta:hover { background: var(--orange-hover); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(232,115,42,0.5); }
+        .hero-cta svg { width: 18px; height: 18px; transition: transform 0.3s; }
+        .hero-cta:hover svg { transform: translateX(4px); }
+
+        .hero-stats {
+            display: flex; justify-content: center; gap: 48px; margin-top: 60px;
+            padding-top: 40px; border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .hero-stat { text-align: center; }
+        .hero-stat-num { font-size: 2rem; font-weight: 800; color: var(--orange); }
+        .hero-stat-label { font-size: 13px; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+
+        /* Wave divider */
+        .wave-divider { position: relative; margin-top: -2px; }
+        .wave-divider svg { display: block; width: 100%; height: auto; }
+
+        /* ========== SECTIONS ========== */
+        .section { padding: 100px 24px; }
+        .section-alt { background: var(--gray-50); }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-label {
+            font-size: 13px; font-weight: 700; color: var(--orange);
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;
+        }
+        .section-header h2 {
+            font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 800;
+            color: var(--navy); line-height: 1.2; margin-bottom: 20px;
+        }
+        .section-header p {
+            font-size: 1.05rem; color: var(--gray-600); max-width: 640px;
+            margin: 0 auto; line-height: 1.7;
+        }
+
+        /* ========== ABOUT ========== */
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+        }
+        .about-text h3 { font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-bottom: 16px; }
+        .about-text p { color: var(--gray-600); margin-bottom: 20px; line-height: 1.8; }
+        .about-features { list-style: none; display: flex; flex-direction: column; gap: 16px; }
+        .about-features li {
+            display: flex; align-items: flex-start; gap: 14px;
+            font-size: 15px; color: var(--gray-600);
+        }
+        .about-features li .icon {
+            flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px;
+            background: linear-gradient(135deg, rgba(232,115,42,0.1), rgba(232,115,42,0.05));
+            display: flex; align-items: center; justify-content: center;
+            color: var(--orange); font-size: 16px;
+        }
+        .about-visual {
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            border-radius: 20px; padding: 48px; position: relative; overflow: hidden;
+            min-height: 400px; display: flex; align-items: center; justify-content: center;
+        }
+        .about-visual::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(232,115,42,0.15), transparent 60%);
+        }
+        .about-visual-content { position: relative; z-index: 1; text-align: center; color: var(--white); }
+        .about-visual-content .big-num { font-size: 5rem; font-weight: 800; color: var(--orange); line-height: 1; }
+        .about-visual-content p { font-size: 1.1rem; opacity: 0.8; margin-top: 12px; }
+
+        /* ========== MEMBERS ========== */
+        .members-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px;
+        }
+        .province-card {
+            background: var(--white); border-radius: var(--radius);
+            box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100);
+            overflow: hidden; transition: all 0.3s;
+        }
+        .province-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+        .province-header {
+            background: linear-gradient(135deg, var(--navy), var(--navy-light));
+            padding: 20px 24px; display: flex; align-items: center; gap: 12px;
+        }
+        .province-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: rgba(255,255,255,0.15); display: flex;
+            align-items: center; justify-content: center;
+            font-size: 18px;
+        }
+        .province-header h3 { color: var(--white); font-size: 1rem; font-weight: 700; }
+        .province-header .count {
+            margin-left: auto; background: rgba(232,115,42,0.2);
+            color: var(--orange-light); padding: 4px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: 600;
+        }
+        .province-members { padding: 16px 24px; }
+        .member-item {
+            padding: 12px 0; border-bottom: 1px solid var(--gray-100);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .member-item:last-child { border-bottom: none; }
+        .member-dot {
+            width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+        }
+        .member-dot.has-link { background: var(--orange); }
+        .member-dot.no-link { background: var(--gray-200); }
+        .member-item a {
+            color: var(--navy); text-decoration: none; font-size: 14px;
+            font-weight: 500; transition: color 0.2s;
+        }
+        .member-item a:hover { color: var(--orange); }
+        .member-item span.member-name {
+            color: var(--gray-600); font-size: 14px;
+        }
+        .member-link-icon { margin-left: auto; color: var(--orange); font-size: 12px; opacity: 0; transition: opacity 0.2s; }
+        .member-item:hover .member-link-icon { opacity: 1; }
+
+        /* ========== CONTACT ========== */
+        .contact-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+        }
+        .contact-info h3 { font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-bottom: 24px; }
+        .contact-detail {
+            display: flex; gap: 16px; margin-bottom: 24px;
+        }
+        .contact-detail .icon-circle {
+            width: 48px; height: 48px; border-radius: 14px; flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(232,115,42,0.1), rgba(232,115,42,0.05));
+            display: flex; align-items: center; justify-content: center;
+            color: var(--orange); font-size: 18px;
+        }
+        .contact-detail h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+        .contact-detail p { font-size: 14px; color: var(--gray-600); line-height: 1.6; }
+
+        .contact-form {
+            background: var(--white); border-radius: var(--radius);
+            padding: 40px; box-shadow: var(--shadow-md); border: 1px solid var(--gray-100);
+        }
+        .contact-form h3 { font-size: 1.2rem; font-weight: 700; color: var(--navy); margin-bottom: 24px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block; font-size: 13px; font-weight: 600;
+            color: var(--gray-600); margin-bottom: 6px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%; padding: 12px 16px; border: 1px solid var(--gray-200);
+            border-radius: 10px; font-size: 14px; font-family: var(--font);
+            color: var(--gray-800); transition: border-color 0.2s, box-shadow 0.2s;
+            background: var(--gray-50);
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            outline: none; border-color: var(--orange);
+            box-shadow: 0 0 0 3px rgba(232,115,42,0.1); background: var(--white);
+        }
+        .form-group textarea { resize: vertical; min-height: 120px; }
+        .btn-submit {
+            width: 100%; padding: 14px; background: var(--orange); color: var(--white);
+            border: none; border-radius: 10px; font-size: 15px; font-weight: 600;
+            cursor: pointer; transition: all 0.3s; font-family: var(--font);
+        }
+        .btn-submit:hover { background: var(--orange-hover); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(232,115,42,0.3); }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            background: var(--navy-dark); padding: 60px 24px 30px; color: rgba(255,255,255,0.6);
+        }
+        .footer-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            padding-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer-brand { color: var(--white); font-size: 16px; font-weight: 700; }
+        .footer-brand span { color: var(--orange); }
+        .footer-links { display: flex; gap: 24px; list-style: none; }
+        .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--orange); }
+        .footer-bottom {
+            max-width: 1200px; margin: 0 auto;
+            text-align: center; padding-top: 24px; font-size: 13px;
+        }
+        .footer-bottom a { color: var(--orange); text-decoration: none; }
+
+        /* ========== ANIMATIONS ========== */
+        .fade-in {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+
+        /* ========== MOBILE MENU ========== */
+        .mobile-menu {
+            display: none; position: fixed; top: 72px; left: 0; right: 0;
+            background: var(--navy-dark); padding: 24px;
+            border-bottom: 2px solid var(--orange);
+            transform: translateY(-100%); transition: transform 0.3s;
+            z-index: 999;
+        }
+        .mobile-menu.open { transform: translateY(0); }
+        .mobile-menu a {
+            display: block; color: rgba(255,255,255,0.85); text-decoration: none;
+            padding: 14px 0; font-size: 16px; font-weight: 500;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .mobile-menu a:hover { color: var(--orange); }
+        .mobile-actions { display: flex; gap: 12px; margin-top: 20px; }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 900px) {
+            .nav-links, .nav-actions { display: none; }
+            .hamburger { display: block; }
+            .mobile-menu { display: block; }
+            .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+            .members-grid { grid-template-columns: 1fr; }
+            .hero-stats { flex-direction: column; gap: 24px; }
+            .form-row { grid-template-columns: 1fr; }
+            .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
+        }
+        @media (max-width: 480px) {
+            .hero h1 { font-size: 2rem; }
+            .section { padding: 60px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-brand">
+                <div class="nav-logo">F</div>
+                <div class="nav-title">CIFHF<span>Fish Harvesters Federation</span></div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#members">Members</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="lang-toggle" id="langToggle">EN | FR</button>
+                <button class="btn-login">Member Login</button>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" onclick="closeMobile()">About</a>
+        <a href="#members" onclick="closeMobile()">Members</a>
+        <a href="#contact" onclick="closeMobile()">Contact</a>
+        <div class="mobile-actions">
+            <button class="lang-toggle">EN | FR</button>
+            <button class="btn-login">Member Login</button>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">United Voice for Independent Harvesters</div>
+            <h1>Canadian Independent<br><em>Fish Harvesters</em><br>Federation</h1>
+            <p>Advocating for the rights, sustainability, and prosperity of independent fish harvesters across every coast and waterway of Canada.</p>
+            <a href="#members" class="hero-cta">
+                Meet Our Members
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-num">22+</div>
+                    <div class="hero-stat-label">Member Organizations</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">7</div>
+                    <div class="hero-stat-label">Provinces</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-num">Coast to Coast</div>
+                    <div class="hero-stat-label" style="font-size:12px">Pacific &bull; Atlantic &bull; Arctic</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wave Divider -->
+    <div class="wave-divider">
+        <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,0 L0,0 Z" fill="#1B3A5C"/>
+        </svg>
+    </div>
+
+    <!-- About -->
+    <section class="section" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-text fade-in">
+                    <div class="section-label">About Us</div>
+                    <h3>Protecting the Livelihood of Canada's Independent Fish Harvesters</h3>
+                    <p>The Canadian Independent Fish Harvesters Federation (CIFHF) brings together fishing associations from British Columbia to Newfoundland, representing the collective voice of independent harvesters who depend on sustainable fisheries for their families and communities.</p>
+                    <p>Our federation advocates at the national level for policies that protect the owner-operator principle, ensure fair access to marine resources, and support the coastal communities that have sustained Canada's fishing heritage for generations.</p>
+                    <ul class="about-features">
+                        <li>
+                            <div class="icon">&#9878;</div>
+                            <div><strong>Policy Advocacy</strong> &mdash; Representing harvesters in federal fisheries policy, trade negotiations, and regulatory consultations.</div>
+                        </li>
+                        <li>
+                            <div class="icon">&#9733;</div>
+                            <div><strong>Sustainability Leadership</strong> &mdash; Championing science-based management and responsible harvesting practices.</div>
+                        </li>
+                        <li>
+                            <div class="icon">&#10003;</div>
+                            <div><strong>Member Support</strong> &mdash; Connecting regional associations with shared resources, expertise, and a unified national platform.</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="about-visual fade-in fade-in-delay-2">
+                    <div class="about-visual-content">
+                        <div class="big-num">1971</div>
+                        <p>Decades of advocacy for<br>independent fish harvesters</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Members -->
+    <section class="section section-alt" id="members">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-label">Our Members</div>
+                <h2>Member Organizations by Province</h2>
+                <p>Our federation unites fishing associations from coast to coast, each representing the independent harvesters of their region.</p>
+            </div>
+
+            <div class="members-grid">
+
+                <!-- British Columbia -->
+                <div class="province-card fade-in">
+                    <div class="province-header">
+                        <div class="province-icon">&#127754;</div>
+                        <h3>British Columbia</h3>
+                        <span class="count">4 members</span>
+                    </div>
+                    <div class="province-members">
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Area A Crab Fishermen's Association</span></div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">BC Longline Fishermen's Association</span></div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">BC Shrimp Trawl Association</span></div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">United Fishermen and Allied Workers Union</span></div>
+                    </div>
+                </div>
+
+                <!-- New Brunswick -->
+                <div class="province-card fade-in fade-in-delay-1">
+                    <div class="province-header">
+                        <div class="province-icon">&#9875;</div>
+                        <h3>New Brunswick</h3>
+                        <span class="count">4 members</span>
+                    </div>
+                    <div class="province-members">
+                        <div class="member-item">
+                            <span class="member-dot has-link"></span>
+                            <a href="http://www.frapp.org" target="_blank" rel="noopener">F&eacute;d&eacute;ration r&eacute;gionale acadienne des p&ecirc;cheurs professionnels</a>
+                            <span class="member-link-icon">&#8599;</span>
+                        </div>
+                        <div class="member-item">
+                            <span class="member-dot has-link"></span>
+                            <a href="http://www.fundynorth.org/" target="_blank" rel="noopener">Fundy North Fishermen's Association</a>
+                            <span class="member-link-icon">&#8599;</span>
+                        </div>
+                        <div class="member-item">
+                            <span class="member-dot has-link"></span>
+                            <a href="http://gmfa.nb.ca/" target="_blank" rel="noopener">Grand Manan Fishermen's Association</a>
+                            <span class="member-link-icon">&#8599;</span>
+                        </div>
+                        <div class="member-item">
+                            <span class="member-dot no-link"></span>
+                            <span class="member-name">Union des p&ecirc;cheurs des Maritimes / Maritime Fishermen's Union</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Newfoundland and Labrador -->
+                <div class="province-card fade-in fade-in-delay-2">
+                    <div class="province-header">
+                        <div class="province-icon">&#127907;</div>
+                        <h3>Newfoundland &amp; Labrador</h3>
+                        <span class="count">1 member</span>
+                    </div>
+                    <div class="province-members">
+                        <div class="member-item">
+                            <span class="member-dot has-link"></span>
+                            <a href="http://www.ffaw.nf.ca/" target="_blank" rel="noopener">Fish, Food and Allied Workers</a>
+                            <span class="member-link-icon">&#8599;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nova Scotia -->
+                <div class="province-card fade-in">
+                    <div class="province-header">
+                        <div class="province-icon">&#128674;</div>
+                        <h3>Nova Scotia</h3>
+                        <span class="count">7 members</span>
+                    </div>
+                    <div class="province-members">
+                        <div class="member-item">
+                            <span class="member-dot has-link"></span>
+                            <a href="http://capebretonlobster.com" target="_blank" rel="noopener">Cape Breton Fish Harvesters Association</a>
+                            <span class="member-link-icon">&#8599;</span>
+                        </div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Eastern Shore Fishermen's Protective Association</span></div>
+                        <div class="member-item">
+                            <span class="member-dot has-link"></span>
+                            <a href="http://www.gcifa.ns.ca/Home.html" target="_blank" rel="noopener">Guysborough Co Inshore Fishermen's Association</a>
+                            <span class="member-link-icon">&#8599;</span>
+                        </div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Halifax West Fishermen's Association</span></div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Maritime Fishermen's Union Local 9</span></div>
+                        <div class="member-item">
+                            <span class="member-dot has-link"></span>
+                            <a href="http://mfu6.com/" target="_blank" rel="noopener">Maritime Fishermen's Union Local 6</a>
+                            <span class="member-link-icon">&#8599;</span>
+                        </div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Richmond County Fishermen's Association</span></div>
+                    </div>
+                </div>
+
+                <!-- Prince Edward Island -->
+                <div class="province-card fade-in fade-in-delay-1">
+                    <div class="province-header">
+                        <div class="province-icon">&#127965;</div>
+                        <h3>Prince Edward Island</h3>
+                        <span class="count">1 member</span>
+                    </div>
+                    <div class="province-members">
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Prince Edward Island Fishermen's Association</span></div>
+                    </div>
+                </div>
+
+                <!-- Quebec - Alliance -->
+                <div class="province-card fade-in fade-in-delay-2">
+                    <div class="province-header">
+                        <div class="province-icon">&#9881;</div>
+                        <h3>Qu&eacute;bec <small style="opacity:0.7;font-weight:400">&mdash; Alliance des P&ecirc;cheurs</small></h3>
+                        <span class="count">3 members</span>
+                    </div>
+                    <div class="province-members">
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Association des p&ecirc;cheurs propri&eacute;taires des &Icirc;les de la Madeleine</span></div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Regroupement des p&ecirc;cheurs professionnels de la moyenne et haute C&ocirc;te-Nord</span></div>
+                        <div class="member-item">
+                            <span class="member-dot has-link"></span>
+                            <a href="http://monhomard.ca" target="_blank" rel="noopener">Regroupement des P&ecirc;cheurs Professionnels du Sud de la Gasp&eacute;sie</a>
+                            <span class="member-link-icon">&#8599;</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quebec - Federation -->
+                <div class="province-card fade-in fade-in-delay-3">
+                    <div class="province-header">
+                        <div class="province-icon">&#9881;</div>
+                        <h3>Qu&eacute;bec <small style="opacity:0.7;font-weight:400">&mdash; F&eacute;d. semi-hauturiers</small></h3>
+                        <span class="count">3 members</span>
+                    </div>
+                    <div class="province-members">
+                        <div class="member-item">
+                            <span class="member-dot has-link"></span>
+                            <a href="http://www.acpgaspesie.com" target="_blank" rel="noopener">Association des capitaines propri&eacute;taires de la Gasp&eacute;sie</a>
+                            <span class="member-link-icon">&#8599;</span>
+                        </div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Association des crabiers des &Icirc;les de la Madeleine</span></div>
+                        <div class="member-item"><span class="member-dot no-link"></span><span class="member-name">Association des crabiers gasp&eacute;siens</span></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section" id="contact">
+        <div class="container">
+            <div class="section-header fade-in">
+                <div class="section-label">Get In Touch</div>
+                <h2>Contact the Federation</h2>
+                <p>Whether you're a member organization, prospective member, or stakeholder, we welcome your inquiry.</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info fade-in">
+                    <h3>Federation Office</h3>
+                    <div class="contact-detail">
+                        <div class="icon-circle">&#128205;</div>
+                        <div>
+                            <h4>Address</h4>
+                            <p>Shediac, New Brunswick<br>Canada</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="icon-circle">&#9993;</div>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@cifhf.ca</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="icon-circle">&#128222;</div>
+                        <div>
+                            <h4>Phone</h4>
+                            <p>(506) 555-0100</p>
+                        </div>
+                    </div>
+                    <div class="contact-detail">
+                        <div class="icon-circle">&#128338;</div>
+                        <div>
+                            <h4>Office Hours</h4>
+                            <p>Monday &ndash; Friday<br>9:00 AM &ndash; 5:00 PM AST</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form fade-in fade-in-delay-2">
+                    <h3>Send Us a Message</h3>
+                    <form onsubmit="event.preventDefault(); alert('Thank you for your message. We will be in touch shortly.');">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="fname">First Name</label>
+                                <input type="text" id="fname" placeholder="Your first name">
+                            </div>
+                            <div class="form-group">
+                                <label for="lname">Last Name</label>
+                                <input type="text" id="lname" placeholder="Your last name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" placeholder="you@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject">
+                                <option value="">Select a topic...</option>
+                                <option>Membership Inquiry</option>
+                                <option>Policy &amp; Advocacy</option>
+                                <option>Media &amp; Press</option>
+                                <option>Partnership Opportunity</option>
+                                <option>General Question</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" placeholder="How can we help?"></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-brand"><span>CIFHF</span> &mdash; Canadian Independent Fish Harvesters Federation</div>
+            <ul class="footer-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#members">Members</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Canadian Independent Fish Harvesters Federation. All rights reserved.</p>
+            <p style="margin-top:8px;opacity:0.5;font-size:11px;">Demo site built by <a href="#">Ember Company</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // ===== Scroll Navigation Highlight =====
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // ===== Mobile Menu =====
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            mobileMenu.classList.toggle('open');
+        });
+        function closeMobile() {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.remove('open');
+        }
+
+        // ===== Fade-in on Scroll =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // ===== Language Toggle (UI Demo) =====
+        let isEN = true;
+        const translations = {
+            en: {
+                heroTitle: 'Canadian Independent<br><em>Fish Harvesters</em><br>Federation',
+                heroSub: 'Advocating for the rights, sustainability, and prosperity of independent fish harvesters across every coast and waterway of Canada.',
+                heroCta: 'Meet Our Members',
+                aboutLabel: 'About Us',
+                membersLabel: 'Our Members',
+                contactLabel: 'Get In Touch',
+            },
+            fr: {
+                heroTitle: 'F&eacute;d&eacute;ration canadienne des<br><em>P&ecirc;cheurs</em><br>Ind&eacute;pendants',
+                heroSub: 'D&eacute;fendre les droits, la durabilit&eacute; et la prosp&eacute;rit&eacute; des p&ecirc;cheurs ind&eacute;pendants sur toutes les c&ocirc;tes et voies navigables du Canada.',
+                heroCta: 'Nos Membres',
+                aboutLabel: '&Agrave; Propos',
+                membersLabel: 'Nos Membres',
+                contactLabel: 'Contactez-Nous',
+            }
+        };
+
+        document.querySelectorAll('.lang-toggle').forEach(btn => {
+            btn.addEventListener('click', () => {
+                isEN = !isEN;
+                const t = isEN ? translations.en : translations.fr;
+                document.querySelector('.hero h1').innerHTML = t.heroTitle;
+                document.querySelector('.hero p').innerHTML = t.heroSub;
+                document.querySelector('.hero-cta').innerHTML = t.heroCta + ' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
+                document.querySelectorAll('.section-label')[0].innerHTML = t.aboutLabel;
+                document.querySelectorAll('.section-label')[1].innerHTML = t.membersLabel;
+                document.querySelectorAll('.section-label')[2].innerHTML = t.contactLabel;
+                document.querySelectorAll('.lang-toggle').forEach(b => {
+                    b.textContent = isEN ? 'EN | FR' : 'FR | EN';
+                });
+            });
+        });
+
+        // ===== Smooth Scroll for CTA =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
